@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Check Availability</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 offset-md-5">
+          <p>Train Number</p>
+          <input type="text" id="tno" name="" value="">
+          <p>Source Station Code</p>
+          <input type="text" id="ssc" name="" value="">
+          <p>Destination Station Code</p>
+          <input type="text" id="dsc" name="" value="">
+          <p>Date</p>
+          <input type="text" id="date"name="" value="">
+          <p>Class Code</p>
+          <input type="text" id="cls"name="" value="">
+          <p>Quota Code</p>
+          <input type="text"  id= "quota"name="" value=""><br>
+          <input type="button" id="submit" name="" onclick="findavail()" value="Submit">
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </body>
+  <script type="text/javascript">
+  var findavail = function(){
+    var xhr=new XMLHttpRequest();
+    var tno=document.getElementById('tno').value;
+    var ssc=document.getElementById('ssc').value;
+    var dsc=document.getElementById('dsc').value;
+    var date=document.getElementById('date').value;
+    var cls=document.getElementById('cls').value;
+    var quota=document.getElementById('quota').value;
+
+    xhr.onreadystatechange= function(){
+      if(this.readyState==4 && this.status==200)
+      {
+        console.log('Hello');
+        console.log('a',JSON.parse(xhr.responseText));
+
+      }
+    }
+
+    var url=  "https://api.railwayapi.com/v2/check-seat/train/18616/source/HTE/dest/HWH/date/16-12-2018/pref/SL/quota/GN/apikey/qe55lkiy58/";
+    console.log(url);
+    xhr.open('GET',
+     "https://api.railwayapi.com/v2/check-seat/train/18616/source/HTE/dest/HWH/date/16-12-2018/pref/SL/quota/GN/apikey/qe55lkiy58/",  true
+    )
+    xhr.send();
+  }
+  findavail();
+  </script>
+</html>
