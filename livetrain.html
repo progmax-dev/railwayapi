@@ -4,6 +4,7 @@
       <style>
         /* Always set the map height explicitly to define the size of the div
          * element that contains the map. */
+
         #map {
           height: 100%;
         }
@@ -14,6 +15,7 @@
           padding: 0;
         }
       </style>
+      <title>Live Trains</title>
     </head>
     <body>
       <div id="map"></div>
@@ -31,7 +33,7 @@
     <script type="text/javascript">
         let arr=[];
         let x=18616;
-        let pnr1=8713395024;//document.getElementById("pnr_no")
+          let pnr1=8713395024;//document.getElementById("pnr_no")
         var url;
         var map;
         function initMap() {
@@ -52,6 +54,7 @@
               map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: traindata.current_station.lat, lng: traindata.current_station.lng},
                 zoom: 10
+
               });
 
               var marker = new google.maps.Marker({position: {lat: traindata.current_station.lat, lng: traindata.current_station.lng}, map:map});

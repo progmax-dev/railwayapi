@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Show Trains</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+
+          <p>Source Station Code</p>
+          <input type="text" id="ssc" name="" value="">
+          <p>Destination Station Code</p>
+          <input type="text" id="dsc" name="" value="">
+          <p>Date</p>
+          <input type="text" id="date"name="" value="">
+          <input type="button" id="submit" name="" onclick="findavail()" value="Submit">
+        </div>
+        <div id="entries" class="col-md-8">
+
+        </div>
+      </div>
+
+    </div>
+  </body>
+<script type="text/javascript">
+  var findavail = function(){
+  var xhr=new XMLHttpRequest();
+  var ssc=document.getElementById('ssc').value;
+  var dsc=document.getElementById('dsc').value;
+  var date=document.getElementById('date').value;
+  var entries=document.getElementById('entries');
+  var ul=document.createElement('ul');
+  entries.appendChild(ul);
+  xhr.onreadystatechange= function(){
+    if(this.readyState==4 && this.status==200)
+    {
+      let data=JSON.parse(xhr.responseText);
+      console.log(data);
+      for(let i=0;i<data.total;i++)
+      {
+
+        var li=document.createElement('li');
+        li.innerHTML=data.trains[i].number+ " "+data.trains[i].name+" "+data.trains[i].dest_arrival_time;
+
+        ul.appendChild(li);
+      }
+    }
+  }
+
+  xhr.open('GET',
+   `https://api.railwayapi.com/v2/between/source/${ssc}/dest/${dsc}/date/${date}/apikey/qe55lkiy58/`,  true
+  )
+  xhr.send();
+}
+
+</script>
+</html>
