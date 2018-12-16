@@ -20,7 +20,7 @@ th{
   background-color:white;
 }
 table{
-  margin-top:20px; 
+  margin-top:20px;
   width:480px;
 }
 .abc{
@@ -63,7 +63,7 @@ ul.a {
               </table>
             </div>
           </div>
-         </div> 
+         </div>
       </div>
     </div>
 
@@ -80,9 +80,9 @@ ul.a {
     let n,src,dest,boarding,res_upto,doj
     let response_object
     let Check_Status = function(){
-      
+
       let pnr_no=document.getElementById('pnr').value;//let pnr1=8713395024
-      let x=`https://api.railwayapi.com/v2/pnr-status/pnr/${pnr_no}/apikey/b9u25eih6i/`
+      let x=`https://api.railwayapi.com/v2/pnr-status/pnr/${pnr_no}/apikey/w69f3n05u0/`
       let response
       axios.get(x).then((response)=>{
            document.getElementById("Train").innerHTML=""
@@ -110,7 +110,7 @@ ul.a {
                                                             <th id="P_num" ><center>Passenger No.</center></td>
                                                             <th id="B_status">Booking Status</td>
                                                             <th id="C_status">Current Status</td>
-                                                          </tr> 
+                                                          </tr>
                                                         </thead>
                                                       </tbody>`
             document.getElementById("Train").innerHTML=`<div class="abc">
@@ -122,7 +122,7 @@ ul.a {
                                                         <li>Reservation upto:${res_upto}</li>
                                                         <li>Total Passengers:${n}</li>
                                                         </ul> </div>`
-                                                        
+
             for(i=0;i<n;i++){
               document.getElementById("AddDetails").innerHTML=document.getElementById("AddDetails").innerHTML+
                                                         `<tr id="Passngers" class="table-primary">
@@ -130,7 +130,7 @@ ul.a {
                                                           <td>${response_object.passengers[i].booking_status}</td>
                                                           <td>${response_object.passengers[i].current_status}</td>
                                                         </tr> `
-            }                                            
+            }
          }
       }
     ).catch((error)=>{
@@ -141,8 +141,8 @@ ul.a {
 
       }
     )
-      
-  
+
+
   }
   </script>
 </html>

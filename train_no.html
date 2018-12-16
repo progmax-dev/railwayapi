@@ -59,7 +59,7 @@ ul.a {
               </table>
             </div>
           </div>
-         </div> 
+         </div>
       </div>
     </div>
 
@@ -76,9 +76,9 @@ ul.a {
     let n,src,dest,boarding,res_upto,doj
     let response_object
     let Check_Status = function(){
-      
+
       let t_name=document.getElementById('train_name').value;//let pnr1=8713395024
-      let x=`https://api.railwayapi.com/v2/name-number/train/${t_name}/apikey/b9u25eih6i/`
+      let x=`https://api.railwayapi.com/v2/name-number/train/${t_name}/apikey/w69f3n05u0/`
       let response
       axios.get(x).then((response)=>{
           document.getElementById("AddDetails").innerHTML={}
@@ -90,14 +90,14 @@ ul.a {
           document.getElementById("AddDetails").innerHTML=`<tr id="Passngers" class="table-primary">
                                                                   <th><center>Train Name</center></th>
                                                                   <td>Train Number</td>
-                                                                </tr> `                                          
+                                                                </tr> `
           document.getElementById("AddDetails").innerHTML=document.getElementById("AddDetails").innerHTML+
                                                               `<tr id="Passngers" class="table-primary">
                                                                 <td><center>${train_name}</center></td>
                                                                 <td>${train_no}</td>
                                                               </tr> `
-                                                     
-         
+
+
       }
     ).catch((error)=>{
         document.getElementById("Train").innerHTML=`<div style="color:red; padding-left:30px; size:30px;" >
@@ -107,8 +107,8 @@ ul.a {
 
       }
     )
-      
-  
+
+
   }
   </script>
 </html>

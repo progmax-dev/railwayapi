@@ -11,7 +11,7 @@ body  {
   background-size: cover;
   height: 100%;
   overflow: hidden;
-  
+
 }
 
 .size1{
@@ -36,7 +36,7 @@ body  {
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-4">
-          
+
           <input type="text" id="tno" name="" value="" class="form-control" placeholder="Train Number">
           <br>
           <input type="text" id="ssc" name="" value="" class="form-control" placeholder="Source Station Code">
@@ -50,7 +50,7 @@ body  {
           <br>
           <input type="text"  id= "quota"name="" value="" class="form-control" placeholder="Quota code"><br>
           <input type="button" class="btn btn-info my-4 btn-block" id="submit" name="" onclick="findavail()" value="Check Availability">
-          
+
         </div>
         <div class="col-md-8">
           <div id="output">
@@ -91,7 +91,7 @@ body  {
     document.getElementById('date').value=date1
 
   var findavail = function(){
-   
+
     let tno=document.getElementById('tno').value;
     let ssc=document.getElementById('ssc').value;
     let dsc=document.getElementById('dsc').value;
@@ -99,9 +99,9 @@ body  {
     let cls=document.getElementById('cls').value;
     let quota=document.getElementById('quota').value;
     let res
-    let x=`https://api.railwayapi.com/v2/check-seat/train/${tno}/source/${ssc}/dest/${dsc}/date/${date}/pref/${cls}/quota/${quota}/apikey/b9u25eih6i/`
+    let x=`https://api.railwayapi.com/v2/check-seat/train/${tno}/source/${ssc}/dest/${dsc}/date/${date}/pref/${cls}/quota/${quota}/apikey/w69f3n05u0/`
     axios.get(x).then((response)=>{
-      
+
         res=response.data
         console.log(res)
               train_name=tno
@@ -136,8 +136,8 @@ body  {
                                                               <td><center>${res.availability[i].date}</center></td>
                                                               <td><center>${res.availability[i].status}</center></td>
                                                              </tr> `
-                } 
-              }                             
+                }
+              }
 
       }
     ).catch((error)=>{
