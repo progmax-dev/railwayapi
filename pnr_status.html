@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Check Availability</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 offset-md-5">
+          <div id="inputing">
+          <p>Enter PNR Number:</p>
+          <input type="text" id="pnr" name="" value=""><br>
+          <input type="button" id="submit" name="" onclick="Check_Status()" value="Check PNR Status"><br>
+          </div>
+          <div id="output">
+            <div id="Train">
+            </div>
+            <div id="psngrs">
+              <table border=2 id="AddDetails">
+              </table>
+            </div>
+          </div>
+         </div> 
+      </div>
+    </div>
+
+
+
+
+  </body>
+  <script type="text/javascript">
+    let pnr_psgrs=[]
+    let n,src,dest,boarding,res_upto,doj
+    let response_object
+    let Check_Status = function(){
+      document.getElementById("AddDetails").innerHTML=document.getElementById("AddDetails").innerHTML+
+                                                    `<tr id="Passngers">
+                                                      <th id="P_num">Passenger Number</td>
+                                                      <th id="B_status">Booking Status</td>
+                                                      <th id="C_status">Current Status</td>
+                                                    </tr> `
+
+      let xhr=new XMLHttpRequest();
+      let pnr_no=document.getElementById('pnr').value;//let pnr1=8713395024
+      let x=`https://api.railwayapi.com/v2/pnr-status/pnr/${pnr_no}/apikey/b9u25eih6i/`
+      let response
+      xhr.open('GET',x,true)
+      
+      xhr.send();
+      xhr.onreadystatechange= function(){
+        if(this.readyState==4 && this.status==200)
+        {
+          response=xhr.responseText
+          response_object=JSON.parse(response)
+          console.log('Hello');
+          console.log(response);
+          console.log(response_object.train.name)
+          train_name=response_object.train.name
+          train_no=response_object.train.number
+          n=response_object.total_passengers
+          src=response_object.from_station.name
+          dest=response_object.to_station.name
+          boarding=response_object.boarding_point.name
+          res_upto=response_object.reservation_upto.name
+          doj=response_object.doj
+          document.getElementById("Train").innerHTML=`<br>Train no:${train_no}
+                                                      <br>Train name:${train_name}
+                                                      <br>Date of Journey:${doj}
+                                                      <br>Boarding Point:${boarding}
+                                                      <br>Reservation upto:${res_upto}
+                                                      <br>Total Passengers:${n}
+                                                      <br>`
+          /*for(i=0;i<n;i++){
+            pnr_psgrs.push({
+              "Passenger_no" : response_object.passengers[i].no,
+              "B_status" : response_object.passengers[i].booking_status,
+              "C_status" : response_object.passengers[i].current_status
+            })     
+          }*/
+          for(i=0;i<n;i++){
+            document.getElementById("AddDetails").innerHTML=document.getElementById("AddDetails").innerHTML+
+                                                      `<tr id="Passngers">
+                                                        <td>${response_object.passengers[i].no}</td>
+                                                        <td>${response_object.passengers[i].booking_status}</td>
+                                                        <td>${response_object.passengers[i].current_status}</td>
+                                                      </tr> `
+          }                                             
+        }
+      }
+      
+      
+  
+  }
+  </script>
+</html>

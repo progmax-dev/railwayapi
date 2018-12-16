@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Check Availability</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 offset-md-5">
+          <p>Train Number</p>
+          <input type="text" id="tno" name="" value="">
+          <p>Source Station Code</p>
+          <input type="text" id="ssc" name="" value="">
+          <p>Destination Station Code</p>
+          <input type="text" id="dsc" name="" value="">
+          <p>Date</p>
+          <input type="text" id="date"name="" value="" placeholder="dd-mm-yyyy">
+          <p>Class Code</p>
+          <input type="text" id="cls"name="" value="">
+          <p>Quota Code</p>
+          <input type="text"  id= "quota" name="" value=""><br>
+          <input type="button" id="submit" name="" onclick="find_avail()" value="Check Availability">
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </body>
+  <script type="text/javascript">
+    let find_avail = function(){
+    let xhr=new XMLHttpRequest();
+    let tno=document.getElementById('tno').value;
+    let ssc=document.getElementById('ssc').value;
+    let dsc=document.getElementById('dsc').value;
+    let date=document.getElementById('date').value;
+    let cls=document.getElementById('cls').value;
+    let quota=document.getElementById('quota').value;
+    let key="b9u25eih6i"
+   // let url=  "https://api.railwayapi.com/v2/check-seat/train/18616/source/HTE/dest/HWH/date/16-12-2018/pref/SL/quota/GN/apikey/qe55lkiy58/";
+    let x=`https://api.railwayapi.com/v2/check-seat/train/18616/source/HTE/dest/HWH/date/16-12-2018/pref/SL/quota/GN/apikey/b9u25eih6i/`
+    //console.log(url);
+    
+    xhr.open('GET',x,true)
+    
+    xhr.send();
+    xhr.onreadystatechange= function(){
+      if(this.readyState==4 && this.status==200)
+      {
+        let response=xhr.responseText
+        let response_object=JSON.parse(response)
+        console.log('Hello');
+        console.log(response);
+
+      }
+    }
+
+    
+  }
+  </script>
+</html>
