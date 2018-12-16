@@ -18,12 +18,16 @@
       <title>Live Trains</title>
     </head>
     <body>
+
+      <div id="Overview">
+          Enter Train no:<br>
+          <input type="text" id="train_no"/><br>
+          Train Start Date:<br>
+          <input id="date"type="text" name="" value="">
+          <button id="Track Train" onclick="initMap()">Check live status</button>
+      </div>
       <div id="map"></div>
-        <div id="Overview">
-            Enter Train no:<br>
-            <input type="text" id="train_no"/><br>
-            <button id="Check_status" onclick="Check_status1()">Check live status</button>
-        </div>
+
         <div id="Details">
 
         </div>
@@ -31,46 +35,52 @@
     </body>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        let arr=[];
-        let x=18616;
-          let pnr1=8713395024;//document.getElementById("pnr_no")
-        var url;
+    let key='qe55lkiy58';
+    var plot=function(tno, date)
+    {
+
+      var xhttp= new XMLHttpRequest();
+
+      xhttp.open(
+      "GET",`https://api.railwayapi.com/v2/live/train/${tno}/date/${date}/apikey/${key}/`, true  );
+
+
+        xhttp.onreadystatechange= function(){
+          if(this.readyState==4 && this.status==200)
+          {
+            traindata= JSON.parse(xhttp.responseText);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat: traindata.current_station.lat, lng: traindata.current_station.lng},
+              zoom: 10
+
+            });
+            function clearMarkers() {
+              setMapOnAll(null);
+            }
+
+            var marker = new google.maps.Marker({position: {lat: traindata.current_station.lat, lng: traindata.current_station.lng}, map:map});
+
+          }
+        }
+
+        xhttp.send();
+    }
+
+
         var map;
         function initMap() {
           var traindata,lat,long;
           var xhttp=new XMLHttpRequest();
-          let key='qe55lkiy58';
-          xhttp.open(
-            "GET",`https://api.railwayapi.com/v2/live/train/${x}/date/15-12-2018/apikey/${key}/`, true
-          )
+          let tno=document.getElementById("train_no").value;
+          let date=document.getElementById("date").value;
 
-          xhttp.send();
-
-          xhttp.onreadystatechange= function(){
-            if(this.readyState==4 && this.status==200)
-            {
-              traindata= JSON.parse(xhttp.responseText);
-
-              map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: traindata.current_station.lat, lng: traindata.current_station.lng},
-                zoom: 10
-
-              });
-
-              var marker = new google.maps.Marker({position: {lat: traindata.current_station.lat, lng: traindata.current_station.lng}, map:map});
-
-            }
-          }
+          plot(tno,date);
+          setInterval(plot,60000);
         }
 
 
-        function Check_status1(){
-            let key='qe55lkiy58';
-            x=document.getElementById("train_no").value;
-            xhttp.open( "GET",`https://api.railwayapi.com/v2/live/train/${x}/date/15-12-2018/apikey/${key}/`);
-            xhttp.send();
-        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD08sMoYQOENEWwpgaMYsWz_ZDvQ5Oo0k&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD08sMoYQOENEWwpgaMYsWz_ZDvQ5Oo0k" async defer></script>
 
 </html>
