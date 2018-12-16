@@ -2,49 +2,79 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Show Trains</title>
   </head>
   <body>
     <div class="container">
-      <div class="row">
+      <div class="row" style="padding-left:500px; padding-bottom: 20px;">
+        <center>Trains<center>
+      </div>
+      <div class="row" style="padding-left:90px;" >
         <div class="col-md-4">
-
-          <p>Source Station Code</p>
-          <input type="text" id="ssc" name="" value="">
-          <p>Destination Station Code</p>
-          <input type="text" id="dsc" name="" value="">
-          <p>Date</p>
-          <input type="text" id="date"name="" value="">
-          <input type="button" id="submit" name="" onclick="findavail()" value="Submit">
+          Enter Source Station:<br>
+          <input type="src" id="ssc">
         </div>
-        <div id="entries" class="col-md-8">
-
+        <div col="col-md-4">
+            Enter Destination Station:<br>
+            <input type="des" id="dsc">
+        </div>
+        <div class="col-md-4" style="padding-left:150px;">
+            Enter Date of Journey:<br>
+            <input type="src" id="date" placeholder="dd-mm-yyyy"><br>
         </div>
       </div>
-
+      <div class="row" style="padding-bottom: 20px; padding-left: 480px; padding-top: 20px;">
+           <center> <button onclick="findavail()" id="Click_Me">Check Trains</button></center>
+      </div>
+      <div class="row" style="height:500px; overflow-y: auto; overflow-x: hidden; padding-left: 20px;">
+          <table border=2 id="entries">
+          </table>
+      </div>
     </div>
   </body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 <script type="text/javascript">
+  
   var findavail = function(){
   var xhr=new XMLHttpRequest();
   var ssc=document.getElementById('ssc').value;
   var dsc=document.getElementById('dsc').value;
   var date=document.getElementById('date').value;
   var entries=document.getElementById('entries');
-  var ul=document.createElement('ul');
-  entries.appendChild(ul);
+
   xhr.onreadystatechange= function(){
     if(this.readyState==4 && this.status==200)
     {
       let data=JSON.parse(xhr.responseText);
       console.log(data);
+      document.getElementById("entries").innerHTML=document.getElementById("entries").innerHTML+
+                                                    `<tr>
+                                                    <th>Train No.</th>
+                                                    <th>Train Name</th>
+                                                    <th>Train Source Station</th>
+                                                    <th>Train Destination Station</th>
+                                                    <th>Expected departure</th>
+                                                    <th>Expected Arrival</th>
+                                                    <th>Journey Duration</th>
+                                                    </tr>`
       for(let i=0;i<data.total;i++)
       {
+        document.getElementById("entries").innerHTML=document.getElementById("entries").innerHTML+
+                                                    `<tr>
+                                                    <td><a href="seat_avail.html?no=${data.trains[i].number}&ssc=${ssc}&dsc=${dsc}&doj=${date}">${data.trains[i].number}</a></td>
+                                                    <td>${data.trains[i].name}</td>
+                                                    <td>${data.trains[i].from_station.name}</td>
+                                                    <td>${data.trains[i].to_station.name}</td>
+                                                    <td>${data.trains[i].src_departure_time}</td>
+                                                    <td>${data.trains[i].dest_arrival_time}</td>
+                                                    <td>${data.trains[i].travel_time}</td>
+                                                    </tr>`
 
-        var li=document.createElement('li');
-        li.innerHTML=data.trains[i].number+ " "+data.trains[i].name+" "+data.trains[i].dest_arrival_time;
-
-        ul.appendChild(li);
       }
     }
   }
