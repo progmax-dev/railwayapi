@@ -1,38 +1,63 @@
-<!DOCTYPE html>
+<!DOCTYPE ht
+  ml>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Show Trains</title>
+    <style>
+    .size1{
+  font-size: 50px;
+  font-style: italic;
+  font-variant: small-caps;
+  padding: 0px 5px 0px 5px;
+  font-color: "red";
+}
+
+body  {
+  background-image: url("train2.jpg") ;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+  
+}
+
+</style>
   </head>
   <body>
-    <div class="container">
-      <div class="row" style="padding-left:500px; padding-bottom: 20px;">
-        <center>Trains<center>
-      </div>
-      <div class="row" style="padding-left:90px;" >
-        <div class="col-md-4">
-          Enter Source Station:<br>
-          <input type="src" id="ssc">
+    <a href="index.html" style="padding-left: 10px;">Back</a>
+    <a href="train_no.html" align="right" style="padding-left: 1310px;">Generate train code</a></h6>
+    <div class="text-center border border-light p-5">
+
+    <p class="size1" style="width:1300px;padding-bottom: 15px;">Trains</p>
+    <div class="container-fluid">
+      <div class="row" style="padding-left:150px; width:1200px;" >
+        <div class="col-md-4" >
+          
+          <input type="src" id="ssc" class="form-control" placeholder="Source Station Code " style="width:200px;">
         </div>
-        <div col="col-md-4">
-            Enter Destination Station:<br>
-            <input type="des" id="dsc">
+        <div col="col-md-4" style="padding-left:50px;">
+            
+            <input type="des" id="dsc" class="form-control" placeholder="Destination Station Code">
         </div>
-        <div class="col-md-4" style="padding-left:150px;">
-            Enter Date of Journey:<br>
-            <input type="src" id="date" placeholder="dd-mm-yyyy"><br>
+        <div class="col-md-4" style="padding-left:120px;">
+            
+            <input type="src" id="date" placeholder="Date of Journey" class="form-control" >
         </div>
       </div>
-      <div class="row" style="padding-bottom: 20px; padding-left: 480px; padding-top: 20px;">
-           <center> <button onclick="findavail()" id="Click_Me">Check Trains</button></center>
+      <div class="row" style="padding-left: 600px; width:200px;">
+            <button onclick="findavail()" id="Click_Me" class="btn btn-info my-4 btn-block" style="width:200px; height:50px;" >Check Trains</button>
       </div>
-      <div class="row" style="height:500px; overflow-y: auto; overflow-x: hidden; padding-left: 20px;">
-          <table border=2 id="entries">
+      <div class="row" style="height:500px; overflow-y: auto; overflow-x: hidden; padding-left: 20px;" id="Here">
+         <center> 
+          <table border=2 id="entries" style="background-color: white; margin-left: 100px;">
           </table>
+        </center>
       </div>
     </div>
+  </div>
   </body>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -40,50 +65,63 @@
 
 <script type="text/javascript">
   
-  var findavail = function(){
-  var xhr=new XMLHttpRequest();
+  var findavail = function(){ console.log("hello");
+
   var ssc=document.getElementById('ssc').value;
   var dsc=document.getElementById('dsc').value;
   var date=document.getElementById('date').value;
   var entries=document.getElementById('entries');
+  let x=`https://api.railwayapi.com/v2/between/source/${ssc}/dest/${dsc}/date/${date}/apikey/b9u25eih6i/`
+  console.log("hello");
+  document.getElementById("entries").innerHTML="";
 
-  xhr.onreadystatechange= function(){
-    if(this.readyState==4 && this.status==200)
-    {
-      let data=JSON.parse(xhr.responseText);
-      console.log(data);
-      document.getElementById("entries").innerHTML=document.getElementById("entries").innerHTML+
-                                                    `<tr>
-                                                    <th>Train No.</th>
-                                                    <th>Train Name</th>
-                                                    <th>Train Source Station</th>
-                                                    <th>Train Destination Station</th>
-                                                    <th>Expected departure</th>
-                                                    <th>Expected Arrival</th>
-                                                    <th>Journey Duration</th>
-                                                    </tr>`
-      for(let i=0;i<data.total;i++)
-      {
-        document.getElementById("entries").innerHTML=document.getElementById("entries").innerHTML+
-                                                    `<tr>
-                                                    <td><a href="seat_avail.html?no=${data.trains[i].number}&ssc=${ssc}&dsc=${dsc}&doj=${date}">${data.trains[i].number}</a></td>
-                                                    <td>${data.trains[i].name}</td>
-                                                    <td>${data.trains[i].from_station.name}</td>
-                                                    <td>${data.trains[i].to_station.name}</td>
-                                                    <td>${data.trains[i].src_departure_time}</td>
-                                                    <td>${data.trains[i].dest_arrival_time}</td>
-                                                    <td>${data.trains[i].travel_time}</td>
-                                                    </tr>`
+   axios.get(x).then((response)=>{
+    
+      data=response.data
+      console.log(response.data);
+        if(data.total == 0 || data.total== null){
+          document.getElementById("Here").innerHTML=`<div style="color:red; padding-left:540px; font-size:30px;" >
+                                                    <center>No trains found.</center>
+                                                    </div>`
+        }else{
+          document.getElementById("entries").innerHTML=document.getElementById("entries").innerHTML+
+                                                        `<tr>
+                                                        <th>Train No.</th>
+                                                        <th>Train Name</th>
+                                                        <th>Train Source Station</th>
+                                                        <th>Train Destination Station</th>
+                                                        <th>Expected departure</th>
+                                                        <th>Expected Arrival</th>
+                                                        <th>Journey Duration</th>
+                                                        </tr>`
+          for(let i=0;i<data.total;i++)
+          {
+            document.getElementById("entries").innerHTML=document.getElementById("entries").innerHTML+
+                                                        `<tr>
+                                                        <td><a href="seat.html?no=${data.trains[i].number}&ssc=${ssc}&dsc=${dsc}&doj=${date}">${data.trains[i].number}</a></td>
+                                                        <td>${data.trains[i].name}</td>
+                                                        <td>${data.trains[i].from_station.name}</td>
+                                                        <td>${data.trains[i].to_station.name}</td>
+                                                        <td>${data.trains[i].src_departure_time}</td>
+                                                        <td>${data.trains[i].dest_arrival_time}</td>
+                                                        <td>${data.trains[i].travel_time}</td>
+                                                        </tr>`
+
+          }
+        }
+      }
+    ).catch((error)=>{
+        document.getElementById("Here").innerHTML=`<div style="color:red; padding-left:50px; font-size:20px;" >
+                                                      Server Busy!!
+                                                      Try after some time.
+                                                    </div>`
 
       }
-    }
+    )
   }
 
-  xhr.open('GET',
-   `https://api.railwayapi.com/v2/between/source/${ssc}/dest/${dsc}/date/${date}/apikey/qe55lkiy58/`,  true
-  )
-  xhr.send();
-}
+  
+
 
 </script>
 </html>

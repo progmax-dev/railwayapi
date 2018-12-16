@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Generate Train Number</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+body  {
+  background-image: url("train2.jpg") ;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+  color: #000000;
+
+
+}
+th{
+  background-color:white;
+}
+table{
+  width:450px;
+}
+.abc{
+  background-color: #17a2b8;
+}
+
+.size1{
+  font-size: 35px;
+  font-style: oblique;
+  font-variant: small-caps;
+  padding: 0px 5px 0px 5px;
+  color: #000000;
+}
+
+ul.a {
+  list-style-position: outside;
+  color: #FFFFFF;
+  font-weight: bolder;
+}
+
+</style>
+  </head>
+  <body>
+    <a href="showtrains.html" style="padding-left: 10px;">Back</a>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 offset-md-4">
+          <div id="inputing">
+          <p class="size1">Enter Train Name</p>
+          <input type="text" id="train_name" name="" value="" class="form-control" placeholder="TRAIN NAME">
+          <input type="button" id="submit" name="" class="btn btn-info my-4 btn-block" onclick="Check_Status()" value="GET TRAIN NO."><br>
+          </div>
+          <div id="output">
+            <div id="Train">
+            </div>
+            <div id="psngrs">
+              <table border=2 id="AddDetails">
+              </table>
+            </div>
+          </div>
+         </div> 
+      </div>
+    </div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+  <script type="text/javascript">
+    let pnr_psgrs=[]
+    let n,src,dest,boarding,res_upto,doj
+    let response_object
+    let Check_Status = function(){
+      
+      let t_name=document.getElementById('train_name').value;//let pnr1=8713395024
+      let x=`https://api.railwayapi.com/v2/name-number/train/${t_name}/apikey/b9u25eih6i/`
+      let response
+      axios.get(x).then((response)=>{
+          document.getElementById("AddDetails").innerHTML={}
+
+          console.log(response.data)
+          response_object=response.data
+          train_name=response_object.train.name
+          train_no=response_object.train.number
+          document.getElementById("AddDetails").innerHTML=`<tr id="Passngers" class="table-primary">
+                                                                  <th><center>Train Name</center></th>
+                                                                  <td>Train Number</td>
+                                                                </tr> `                                          
+          document.getElementById("AddDetails").innerHTML=document.getElementById("AddDetails").innerHTML+
+                                                              `<tr id="Passngers" class="table-primary">
+                                                                <td><center>${train_name}</center></td>
+                                                                <td>${train_no}</td>
+                                                              </tr> `
+                                                     
+         
+      }
+    ).catch((error)=>{
+        document.getElementById("Train").innerHTML=`<div style="color:red; padding-left:30px; size:30px;" >
+                                                      Server Busy!!
+                                                      Try after some time.
+                                                    </div>`
+
+      }
+    )
+      
+  
+  }
+  </script>
+</html>

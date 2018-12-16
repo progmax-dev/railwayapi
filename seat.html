@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Check Availability</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+body  {
+  background-image: url("train2.jpg") ;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+  
+}
+
+.size1{
+  font-size: 35px;
+  font-style: italic;
+  font-variant: small-caps;
+  padding: 0px 5px 0px 5px;
+  font-color: "red";
+}
+.form-control{
+  background-color: rgba(0,1,0,0);
+}
+
+</style>
+  </head>
+  <body>
+     <a href="showtrains.html" style="padding-left: 10px;">Back</a>
+    <form class="text border border-light p-5">
+
+      <p class="size1" >Seat Availability</p>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          
+          <input type="text" id="tno" name="" value="" class="form-control" placeholder="Train Number">
+          <br>
+          <input type="text" id="ssc" name="" value="" class="form-control" placeholder="Source Station Code">
+         <br>
+          <input type="text" id="dsc" name="" value="" class="form-control" placeholder="Destination Station Code">
+          <br>
+          <input type="text" id="date"name="" value=""
+          class="form-control" placeholder="Date">
+          <br>
+          <input type="text" id="cls"name="" value="" class="form-control" placeholder="Class code:CC/SL">
+          <br>
+          <input type="text"  id= "quota"name="" value="" class="form-control" placeholder="Quota code"><br>
+          <input type="button" class="btn btn-info my-4 btn-block" id="submit" name="" onclick="findavail()" value="Check Availability">
+          
+        </div>
+        <div class="col-md-8">
+          <div id="output">
+            <div id="Train" border=2 style="background-color: #b8daff;width:90%; padding-left: 10px;margin-bottom: 20px;">
+
+            </div>
+            <div id="psngrs">
+              <table border=2 id="AddDetails" style="width:90%">
+              </table>
+            </div>
+          </div>
+      </div>
+    </div>
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  </body>
+  <script type="text/javascript">
+    console.log(window.location.href)
+    var params = window.location.href.split('?');
+    console.log(params[1])
+    var para=params[1].split('&')
+    var t=para[0].split('=')
+    var t1=t[1]
+    var s=para[1].split('=')
+    var s1=s[1]
+    var d=para[2].split('=')
+    var d1=d[1]
+    var dat1=para[3].split('=')
+    var date1=dat1[1]
+    document.getElementById('tno').value=t1
+    document.getElementById('ssc').value=s1
+    document.getElementById('dsc').value=d1
+    document.getElementById('date').value=date1
+
+  var findavail = function(){
+   
+    let tno=document.getElementById('tno').value;
+    let ssc=document.getElementById('ssc').value;
+    let dsc=document.getElementById('dsc').value;
+    let date=document.getElementById('date').value;
+    let cls=document.getElementById('cls').value;
+    let quota=document.getElementById('quota').value;
+    let res
+    let x=`https://api.railwayapi.com/v2/check-seat/train/${tno}/source/${ssc}/dest/${dsc}/date/${date}/pref/${cls}/quota/${quota}/apikey/b9u25eih6i/`
+    axios.get(x).then((response)=>{
+      
+        res=response.data
+        console.log(res)
+              train_name=tno
+              train_no=tno
+              src1=res.from_station.name
+              dest1=res.to_station.name
+              doj=date
+              let n=res.availability.length
+              if(n==0 || n==null){
+                document.getElementById("Train").innerHTML=`<div style="color:red; padding-left:30px; font-size:30px;" >
+                                                              <center>Page not found</center>
+                                                            </div>`
+
+              }else{
+                document.getElementById("Train").innerHTML=`<div class="abc">
+                                                            <ul class="a">
+                                                            <center>
+                                                            <li>Train no:${train_no}</li>
+                                                            <li>Train name:${train_name}</li>
+                                                            <li>Date of Journey:${doj}</li>
+                                                            <li>Source:${src1}</li>
+                                                            <li>Destination:${dest1}</li>
+                                                            </center>
+                                                            </ul> </div>`
+                document.getElementById("AddDetails").innerHTML=`<tr id="Passngers" class="table-primary">
+                                                                  <th><center>Date</center></th>
+                                                                  <th><center>Status</center></th>
+                                                                 </tr> `
+                for(i=0;i<n;i++){
+                  document.getElementById("AddDetails").innerHTML=document.getElementById("AddDetails").innerHTML+
+                                                            `<tr id="Passngers" class="table-primary">
+                                                              <td><center>${res.availability[i].date}</center></td>
+                                                              <td><center>${res.availability[i].status}</center></td>
+                                                             </tr> `
+                } 
+              }                             
+
+      }
+    ).catch((error)=>{
+        document.getElementById("Train").innerHTML=`<div style="color:red; padding-left:30px;size:30px;" >
+                                                      Server Busy!!
+                                                      Try after some time.
+                                                    </div>`
+
+      }
+    )
+  }
+
+  </script>
+</html>
